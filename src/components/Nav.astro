@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+
+// Nav links are generated from the projects collection — adding a project
+// .md file adds its link here automatically. Drafts are hidden.
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+// Standalone pages: add an entry here to put it in the nav.
+const pages = [{ href: '/about/', label: 'about' }];
+
+const current = Astro.url.pathname;
+---
+
+<nav>
+  <a href="/" class="brand">alden@portfolio ~ $</a>
+  <div class="links">
+    {projects.map((p) => (
+      <a href={`/projects/${p.id}/`} aria-current={current === `/projects/${p.id}/` ? 'page' : undefined}>
+        {p.id}
+      </a>
+    ))}
+    {pages.map((p) => (
+      <a href={p.href} aria-current={current === p.href ? 'page' : undefined}>{p.label}</a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space);
+    align-items: baseline;
+    justify-content: space-between;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space);
+    border-bottom: 1px solid var(--border);
+  }
+  .brand {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--space) * 0.75);
+  }
+  .links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .links a:hover,
+  .links a[aria-current='page'] {
+    color: var(--accent);
+  }
+</style>

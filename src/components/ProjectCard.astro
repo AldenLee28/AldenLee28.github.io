@@ -1,0 +1,52 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  blurb: string;
+  tags: string[];
+}
+
+const { id, title, blurb, tags } = Astro.props;
+---
+
+<a class="card" href={`/projects/${id}/`}>
+  <h3>{title}</h3>
+  <p>{blurb}</p>
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map((t) => <span>[{t}]</span>)}
+    </div>
+  )}
+</a>
+
+<style>
+  .card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space);
+    text-decoration: none;
+    color: var(--text);
+  }
+  .card:hover {
+    border-color: var(--accent);
+  }
+  h3 {
+    margin: 0 0 0.4em;
+    color: var(--accent);
+  }
+  p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95em;
+  }
+  .tags {
+    margin-top: 0.6em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    font-size: 0.85em;
+    color: var(--accent-2);
+  }
+</style>
