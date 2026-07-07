@@ -1,0 +1,24 @@
+/*
+ * Design tokens — the single place to change the site's look.
+ * Every color, font, and size used anywhere on the site is defined here.
+ * See GUIDE.md § "Change the look" for a ready-made light theme.
+ */
+:root {
+  /* colors */
+  --bg: #0d1117;            /* page background */
+  --surface: #161b22;       /* cards, nav bar */
+  --border: #2d333b;        /* card and nav borders */
+  --text: #d4dae2;          /* body text */
+  --muted: #8b949e;         /* secondary text (blurbs, footer) */
+  --accent: #3fb950;        /* links, highlights (terminal green) */
+  --accent-2: #d29922;      /* secondary highlight (amber) — tags */
+
+  /* fonts */
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  --font-body: var(--font-mono);   /* swap to a sans-serif for a softer look */
+
+  /* layout */
+  --max-width: 46rem;
+  --space: 1rem;
+  --radius: 6px;
+}

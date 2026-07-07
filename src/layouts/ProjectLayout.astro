@@ -1,0 +1,47 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, blurb, tags, repo, demo, hero } = project.data;
+---
+
+<BaseLayout title={`${title} — Alden Lee`} description={blurb}>
+  <article>
+    <h1>{title}</h1>
+    <p class="blurb">{blurb}</p>
+    {tags.length > 0 && (
+      <div class="tags">{tags.map((t) => <span>[{t}]</span>)}</div>
+    )}
+    {(repo || demo) && (
+      <p class="links">
+        {repo && <a href={repo}>source ↗</a>}
+        {demo && <a href={demo}>live demo ↗</a>}
+      </p>
+    )}
+    {hero && <img src={hero} alt={title} />}
+    <slot />
+  </article>
+</BaseLayout>
+
+<style>
+  .blurb {
+    color: var(--muted);
+    font-size: 1.1em;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    color: var(--accent-2);
+    font-size: 0.9em;
+  }
+  .links {
+    display: flex;
+    gap: var(--space);
+  }
+</style>
