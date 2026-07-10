@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import ThemeToggle from './ThemeToggle.astro';
 
 // Nav links are generated from the projects collection — adding a project
 // .md file adds its link here automatically. Drafts are hidden.
@@ -12,48 +13,55 @@ const pages = [{ href: '/about/', label: 'about' }];
 const current = Astro.url.pathname;
 ---
 
-<nav>
-  <a href="/" class="brand">alden@portfolio ~ $</a>
-  <div class="links">
-    {projects.map((p) => (
-      <a href={`/projects/${p.id}/`} aria-current={current === `/projects/${p.id}/` ? 'page' : undefined}>
-        {p.id}
-      </a>
-    ))}
-    {pages.map((p) => (
-      <a href={p.href} aria-current={current === p.href ? 'page' : undefined}>{p.label}</a>
-    ))}
+<nav class="glass-nav">
+  <div class="inner">
+    <a href="/" class="brand">Alden Lee</a>
+    <div class="links">
+      {projects.map((p) => (
+        <a href={`/projects/${p.id}/`} aria-current={current === `/projects/${p.id}/` ? 'page' : undefined}>
+          {p.id}
+        </a>
+      ))}
+      {pages.map((p) => (
+        <a href={p.href} aria-current={current === p.href ? 'page' : undefined}>{p.label}</a>
+      ))}
+      <ThemeToggle />
+    </div>
   </div>
 </nav>
 
 <style>
-  nav {
+  .inner {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space);
-    align-items: baseline;
+    gap: var(--space-md);
+    align-items: center;
     justify-content: space-between;
-    max-width: var(--max-width);
+    max-width: var(--container-3xl);
     margin: 0 auto;
-    padding: var(--space);
-    border-bottom: 1px solid var(--border);
+    padding: var(--space-sm) var(--space-md);
   }
   .brand {
-    color: var(--accent);
+    color: var(--color-text);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 700;
+  }
+  .brand:hover {
+    color: var(--color-accent);
+    text-decoration: none;
   }
   .links {
     display: flex;
     flex-wrap: wrap;
-    gap: calc(var(--space) * 0.75);
+    gap: var(--space-md);
+    align-items: center;
   }
   .links a {
-    color: var(--muted);
+    color: var(--color-text-muted);
     text-decoration: none;
   }
   .links a:hover,
   .links a[aria-current='page'] {
-    color: var(--accent);
+    color: var(--color-accent-text);
   }
 </style>

@@ -15,12 +15,12 @@ const { title, blurb, tags, repo, demo, hero } = project.data;
     <h1>{title}</h1>
     <p class="blurb">{blurb}</p>
     {tags.length > 0 && (
-      <div class="tags">{tags.map((t) => <span>[{t}]</span>)}</div>
+      <div class="tags">{tags.map((t) => <span>{t}</span>)}</div>
     )}
     {(repo || demo) && (
       <p class="links">
-        {repo && <a href={repo}>source ↗</a>}
-        {demo && <a href={demo}>live demo ↗</a>}
+        {repo && <a class="glass-button" href={repo}>source ↗</a>}
+        {demo && <a class="glass-button" href={demo}>live demo ↗</a>}
       </p>
     )}
     {hero && <img src={hero} alt={title} />}
@@ -30,18 +30,28 @@ const { title, blurb, tags, repo, demo, hero } = project.data;
 
 <style>
   .blurb {
-    color: var(--muted);
-    font-size: 1.1em;
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
   }
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
-    color: var(--accent-2);
-    font-size: 0.9em;
+    gap: var(--space-sm);
+  }
+  .tags span {
+    font-size: var(--text-xs);
+    color: var(--color-accent-text);
+    background: var(--color-accent-glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    padding: 0.1em 0.7em;
   }
   .links {
     display: flex;
-    gap: var(--space);
+    gap: var(--space-md);
+  }
+  .links a {
+    text-decoration: none;
+    color: var(--color-text);
   }
 </style>

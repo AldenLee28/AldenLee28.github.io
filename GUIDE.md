@@ -90,24 +90,30 @@ Open `src/pages/index.astro`:
 
 ## 5. Change the look (theme)
 
-Everything visual lives in `src/styles/tokens.css` — colors, fonts, sizing.
-Edit those variables and the whole site restyles at once.
+The design is adapted from the [astro-haze](https://github.com/kpab/astro-haze)
+theme (MIT): glass cards, an animated aurora background, and a light/dark
+toggle (sun/moon/monitor button in the nav — visitors cycle light → dark →
+follow-system, and the choice is remembered).
 
-Light theme example — replace the color block with:
+Everything you'd normally want to change sits in the **EDIT ME block at the
+top of `src/styles/tokens.css`**:
 
-```css
---bg: #ffffff;
---surface: #f5f5f4;
---border: #e2e0dd;
---text: #1c1917;
---muted: #6b6660;
---accent: #0d7a3f;
---accent-2: #b45309;
-```
+- **Accent color** — the `--color-accent*` variables are HSL values; change
+  the first number (the hue, 0–360) on all of them to re-color the site:
+  280 = purple (default), 200 = blue, 150 = green, 20 = orange.
+  The same variables appear again in the `[data-theme="dark"]` block below —
+  change the hue there too so dark mode matches.
+- **Aurora colors** — `--aurora-1` to `--aurora-4` are the four blurred
+  gradient blobs behind the page. Same idea: edit the hues.
+- **Fonts** — `--font-sans` is the whole site's typeface; `--font-mono` is
+  used for code blocks. Replace either stack, e.g.
+  `--font-sans: Georgia, serif;`.
 
-To drop the monospace look, set `--font-body` to a sans-serif stack, e.g.
-`system-ui, sans-serif`. The `> ` prefix on headings comes from the
-`h1::before` rule in `src/styles/global.css` — delete that rule to remove it.
+Deeper changes: glass transparency/blur live in the `--glass-*` tokens,
+page/text colors in `--color-bg`/`--color-text*` (light mode in `:root`,
+dark mode in `[data-theme="dark"]`). The glass effects themselves
+(`.glass-card`, `.glass-nav`, `.glass-button`) are defined in
+`src/styles/glass.css`.
 
 ## 6. Add images
 

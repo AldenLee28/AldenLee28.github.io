@@ -1,24 +1,140 @@
 /*
- * Design tokens — the single place to change the site's look.
- * Every color, font, and size used anywhere on the site is defined here.
- * See GUIDE.md § "Change the look" for a ready-made light theme.
+ * Design tokens — adapted from the Astro Haze theme
+ * https://github.com/kpab/astro-haze (MIT License, © kpab)
+ *
+ * ======================= EDIT ME =======================
+ * The variables in the :root block directly below are the
+ * ones to change for a different look: accent color, aurora
+ * gradient hues, and fonts. See GUIDE.md § "Change the look".
+ * ========================================================
  */
 :root {
-  /* colors */
-  --bg: #0d1117;            /* page background */
-  --surface: #161b22;       /* cards, nav bar */
-  --border: #2d333b;        /* card and nav borders */
-  --text: #d4dae2;          /* body text */
-  --muted: #8b949e;         /* secondary text (blurbs, footer) */
-  --accent: #3fb950;        /* links, highlights (terminal green) */
-  --accent-2: #d29922;      /* secondary highlight (amber) — tags */
+  /* Accent — change the hue (first number, 0-360) to re-color the site.
+     280 = purple, 200 = blue, 150 = green, 20 = orange */
+  --color-accent: hsl(280, 70%, 60%);
+  --color-accent-light: hsl(280, 70%, 75%);
+  --color-accent-dark: hsl(280, 70%, 45%);
+  --color-accent-glass: hsla(280, 70%, 60%, 0.1);
+  /* Accent tuned for text on the page background (WCAG AA). Links/labels
+     use this; --color-accent stays for fills, borders and glows. */
+  --color-accent-text: hsl(280, 70%, 45%);
 
-  /* fonts */
-  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
-  --font-body: var(--font-mono);   /* swap to a sans-serif for a softer look */
+  /* Aurora gradient colors — the four blurred blobs behind the page */
+  --aurora-1: hsl(280, 100%, 70%);
+  --aurora-2: hsl(200, 100%, 60%);
+  --aurora-3: hsl(340, 100%, 65%);
+  --aurora-4: hsl(150, 70%, 60%);
 
-  /* layout */
-  --max-width: 46rem;
-  --space: 1rem;
-  --radius: 6px;
+  /* Fonts */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+
+  /* ================== end EDIT ME ================== */
+
+  /* Glass effect (light mode) */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-solid: rgba(255, 255, 255, 0.7);
+  --glass-blur: 12px;
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --glass-sat: 180%;
+
+  /* Base colors (light mode) */
+  --color-bg: hsl(220, 20%, 97%);
+  --color-surface: rgba(255, 255, 255, 0.4);
+  --color-text: hsl(220, 20%, 10%);
+  --color-text-muted: hsl(220, 15%, 35%);
+  --color-text-inverse: hsl(220, 20%, 95%);
+
+  /* Typography scale */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
+  --text-base: clamp(1rem, 0.9rem + 0.4vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.5vw, 2.25rem);
+  --text-4xl: clamp(2.25rem, 1.8rem + 2vw, 3rem);
+  --text-5xl: clamp(3rem, 2.2rem + 3vw, 3.75rem);
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+
+  /* Z-index layers */
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-toast: 500;
+
+  /* Content width */
+  --container-3xl: 48rem;
+}
+
+/* Dark mode tokens */
+[data-theme="dark"] {
+  /* Glass effect - darker, more saturated */
+  --glass-bg: rgba(0, 0, 0, 0.2);
+  --glass-bg-solid: rgba(0, 0, 0, 0.7);
+  --glass-blur: 16px;
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-sat: 150%;
+
+  /* Base colors */
+  --color-bg: hsl(220, 20%, 8%);
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-text: hsl(220, 20%, 95%);
+  --color-text-muted: hsl(220, 15%, 65%);
+  --color-text-inverse: hsl(220, 20%, 10%);
+
+  /* Accent colors adjusted for dark mode */
+  --color-accent: hsl(280, 80%, 65%);
+  --color-accent-light: hsl(280, 80%, 75%);
+  --color-accent-dark: hsl(280, 80%, 55%);
+  --color-accent-glass: hsla(280, 80%, 65%, 0.15);
+  /* On dark backgrounds the lighter accent already clears AA. */
+  --color-accent-text: hsl(280, 80%, 75%);
+}
+
+/* Reduced transparency preference */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-bg-solid: rgba(255, 255, 255, 0.98);
+    --glass-blur: 0px;
+    --glass-border: rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="dark"] {
+    --glass-bg: rgba(20, 20, 20, 0.95);
+    --glass-bg-solid: rgba(10, 10, 10, 0.98);
+    --glass-blur: 0px;
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-base: 0ms;
+    --transition-slow: 0ms;
+  }
 }
