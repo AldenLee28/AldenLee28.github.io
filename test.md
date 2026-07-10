@@ -53,3 +53,36 @@ rebuild back to 5 pages.
 
 Not yet run — pending first push to GitHub (Actions workflow in
 `.github/workflows/deploy.yml`).
+
+## 2026-07-10 — astro-haze theme port
+
+Applied the visual system from https://github.com/kpab/astro-haze (MIT):
+tokens + glass.css + AuroraBackground + ThemeToggle, re-skinned all
+components. Architecture unchanged.
+
+### `npm run build` + `npx astro check`
+
+```
+[build] 5 page(s) built in 3.20s
+Result (13 files): 0 errors, 0 warnings, 0 hints
+```
+
+Result: PASS.
+
+### Theme markers in built home page
+
+```
+aurora-background: 2   glass-nav: 1   theme-toggle: 3
+data-theme: 6          glass-card: 3  glass-panel: 1
+```
+
+Result: PASS — aurora, glass nav, toggle, and FOUC script all present.
+
+### Add-a-page regression
+
+```
+home-page links to test-project: 2   (nav + card)
+rebuild after cleanup: 5 page(s)
+```
+
+Result: PASS. Stale-token grep over src/: no matches.

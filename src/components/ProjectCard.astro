@@ -9,12 +9,12 @@ interface Props {
 const { id, title, blurb, tags } = Astro.props;
 ---
 
-<a class="card" href={`/projects/${id}/`}>
+<a class="glass-card card" href={`/projects/${id}/`}>
   <h3>{title}</h3>
   <p>{blurb}</p>
   {tags.length > 0 && (
     <div class="tags">
-      {tags.map((t) => <span>[{t}]</span>)}
+      {tags.map((t) => <span>{t}</span>)}
     </div>
   )}
 </a>
@@ -22,31 +22,35 @@ const { id, title, blurb, tags } = Astro.props;
 <style>
   .card {
     display: block;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: var(--space);
+    padding: var(--space-lg);
     text-decoration: none;
-    color: var(--text);
+    color: var(--color-text);
   }
   .card:hover {
-    border-color: var(--accent);
+    text-decoration: none;
   }
   h3 {
     margin: 0 0 0.4em;
-    color: var(--accent);
+    font-size: var(--text-lg);
+    color: var(--color-accent-text);
   }
   p {
     margin: 0;
-    color: var(--muted);
-    font-size: 0.95em;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
   }
   .tags {
-    margin-top: 0.6em;
+    margin-top: var(--space-sm);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
-    font-size: 0.85em;
-    color: var(--accent-2);
+    gap: var(--space-sm);
+  }
+  .tags span {
+    font-size: var(--text-xs);
+    color: var(--color-accent-text);
+    background: var(--color-accent-glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    padding: 0.1em 0.7em;
   }
 </style>
