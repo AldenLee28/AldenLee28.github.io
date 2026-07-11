@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const all = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+// Split each category into loose (ungrouped) cards and named sub-groups so the
+// template renders e.g. Tech → [loose cards] → "ML growth diary" subsection.
+function organize(category: 'tech' | 'finance') {
+  const items = all.filter((p) => p.data.category === category);
+  const loose = items.filter((p) => !p.data.group);
+  const groups = new Map<string, typeof items>();
+  for (const p of items) {
+    if (!p.data.group) continue;
+    const bucket = groups.get(p.data.group) ?? [];
+    bucket.push(p);
+    groups.set(p.data.group, bucket);
+  }
+  return { loose, groups };
+}
+
+const sections = [
+  { key: 'tech' as const, label: 'Tech' },
+  { key: 'finance' as const, label: 'Finance' },
+];
+---
+
+<BaseLayout title="Portfolio — Alden Lee">
+  <h1>Portfolio</h1>
+
+  {sections.map(({ key, label }) => {
+    const { loose, groups } = organize(key);
+    if (loose.length === 0 && groups.size === 0) return null;
+    return (
+      <section class="category">
+        <h2>{label}</h2>
+
+        {loose.length > 0 && (
+          <div class="grid">
+            {loose.map((p) => (
+              <ProjectCard id={p.id} title={p.data.title} blurb={p.data.blurb} tags={p.data.tags} wip={p.data.wip} />
+            ))}
+          </div>
+        )}
+
+        {[...groups.entries()].map(([groupName, items]) => (
+          <div class="subgroup">
+            <h3>{groupName}</h3>
+            <div class="grid">
+              {items.map((p) => (
+                <ProjectCard id={p.id} title={p.data.title} blurb={p.data.blurb} tags={p.data.tags} wip={p.data.wip} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+    );
+  })}
+</BaseLayout>
+
+<style>
+  .category {
+    margin-bottom: var(--space-2xl);
+  }
+  .subgroup {
+    margin-top: var(--space-lg);
+  }
+  .subgroup h3 {
+    color: var(--color-text-muted);
+    font-size: var(--text-base);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--space-md);
+  }
+</style>

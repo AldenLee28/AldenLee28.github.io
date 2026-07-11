@@ -4,13 +4,17 @@ interface Props {
   title: string;
   blurb: string;
   tags: string[];
+  wip?: boolean;
 }
 
-const { id, title, blurb, tags } = Astro.props;
+const { id, title, blurb, tags, wip = false } = Astro.props;
 ---
 
 <a class="glass-card card" href={`/projects/${id}/`}>
-  <h3>{title}</h3>
+  <h3>
+    {title}
+    {wip && <span class="wip">WIP</span>}
+  </h3>
   <p>{blurb}</p>
   {tags.length > 0 && (
     <div class="tags">
@@ -33,6 +37,18 @@ const { id, title, blurb, tags } = Astro.props;
     margin: 0 0 0.4em;
     font-size: var(--text-lg);
     color: var(--color-accent-text);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+  .wip {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    padding: 0.05em 0.6em;
   }
   p {
     margin: 0;

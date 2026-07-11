@@ -1,6 +1,7 @@
 ---
 title: DCF Valuation Engine
 blurb: Multi-model discounted-cash-flow engine fed by Capital IQ exports and FRED macro data.
+category: finance
 order: 1
 tags: [python, valuation, fred]
 draft: false

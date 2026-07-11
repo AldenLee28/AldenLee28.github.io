@@ -86,3 +86,47 @@ rebuild after cleanup: 5 page(s)
 ```
 
 Result: PASS. Stale-token grep over src/: no matches.
+
+## 2026-07-11 — IA restructure (Website demands.pdf)
+
+Applied the PDF's information architecture: clean nav (Portfolio / Resume /
+Blog), Portfolio grouped into Tech & Finance with an "ML growth diary"
+sub-group, new Blog, Resume PDF-embed page, homepage intro + avatar + contact.
+Added `category`/`group`/`wip` to the projects schema and a `blog` collection.
+
+### `npm run build` + `npx astro check`
+
+```
+[build] 13 page(s) built in 801ms
+  (home, portfolio, resume, blog index + welcome, 7 project pages)
+Result (16 files): 0 errors, 0 warnings, 0 hints
+```
+
+Result: PASS.
+
+### Content checks (built HTML)
+
+```
+portfolio: >Tech< ✓  >Finance< ✓  >ML growth diary< ✓
+projects present: SimpleTrader, XGBoost Classifier, XGBoost Regression,
+                  arXiv Scraper, DCF Valuation, Research Reports, Digimix (7)
+WIP badges: 5
+resume: object data="/resume.pdf" + href="/resume.pdf" download ✓
+nav tabs: /portfolio/ /resume/ /blog/ only (no /about) ✓
+contact: mailto ajmlee28@gmail.com + github.com/AldenLee28 + linkedin ✓
+blog index lists: Welcome ✓
+stale /about refs in dist/: 0
+```
+
+Result: PASS.
+
+### Add-a-page regression (new category flow)
+
+Temp `regression-test.md` (`category: finance`) → appeared under Finance on
+`/portfolio/` and built its own page; removed → back to 13 pages.
+
+Result: PASS.
+
+### Not yet supplied (placeholders live)
+
+`public/resume.pdf`, `public/images/profile.jpg`, real LinkedIn URL.

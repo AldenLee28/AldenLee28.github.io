@@ -7,12 +7,13 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, blurb, tags, repo, demo, hero } = project.data;
+const { title, blurb, tags, repo, demo, hero, wip } = project.data;
 ---
 
 <BaseLayout title={`${title} — Alden Lee`} description={blurb}>
   <article>
     <h1>{title}</h1>
+    {wip && <p class="wip">🚧 Work in progress — full write-up coming.</p>}
     <p class="blurb">{blurb}</p>
     {tags.length > 0 && (
       <div class="tags">{tags.map((t) => <span>{t}</span>)}</div>
@@ -29,6 +30,15 @@ const { title, blurb, tags, repo, demo, hero } = project.data;
 </BaseLayout>
 
 <style>
+  .wip {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xs) var(--space-md);
+  }
   .blurb {
     color: var(--color-text-muted);
     font-size: var(--text-lg);

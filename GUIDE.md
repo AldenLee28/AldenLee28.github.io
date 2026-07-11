@@ -12,30 +12,40 @@ npm run dev        # then open http://localhost:4321
 The dev server hot-reloads: save any file and the browser updates itself.
 Stop it with `Ctrl+C`.
 
+## Site structure
+
+The nav has three tabs: **Portfolio**, **Resume**, **Blog** (the "Alden Lee"
+logo goes home). The homepage is your intro + photo + contact. Projects are
+grouped on the Portfolio page under **Tech** and **Finance**; recurring updates
+go in the **Blog**.
+
 ## 2. Add a project page
 
-Every `.md` file in `src/content/projects/` automatically becomes:
-a nav link + a card on the home page + its own page at `/projects/<filename>/`.
-You never edit the nav or home page to add a project.
+Every `.md` file in `src/content/projects/` automatically becomes a card on the
+**Portfolio** page (under its category) + its own page at
+`/projects/<filename>/`. You never edit the Portfolio page to add a project.
 
 1. Copy `src/content/projects/_template.md` and rename it.
    The filename becomes the URL: `goldbot.md` → `/projects/goldbot/`.
 2. Fill in the frontmatter (the block between `---` lines):
 
-   | Field   | Required | What it does |
-   |---------|----------|--------------|
-   | `title` | yes      | Page heading and card title |
-   | `blurb` | yes      | One-liner on the home-page card |
-   | `order` | no       | Sort position in nav/grid (lower = first, default 99) |
-   | `tags`  | no       | Shown as `[tag]` chips |
-   | `repo`  | no       | "source ↗" link (full URL) |
-   | `demo`  | no       | "live demo ↗" link (full URL) |
-   | `hero`  | no       | Image at the top of the page, e.g. `/images/goldbot.png` |
-   | `draft` | no       | `true` hides the project from the whole site |
+   | Field      | Required | What it does |
+   |------------|----------|--------------|
+   | `title`    | yes      | Page heading and card title |
+   | `blurb`    | yes      | One-liner on the card |
+   | `category` | **yes**  | `tech` or `finance` — which Portfolio section it lands in |
+   | `group`    | no       | Sub-heading within a category, e.g. `ML growth diary` |
+   | `order`    | no       | Sort position within its section (lower = first, default 99) |
+   | `tags`     | no       | Shown as chips |
+   | `repo`     | no       | "source ↗" link (full URL) |
+   | `demo`     | no       | "live demo ↗" link (full URL) |
+   | `hero`     | no       | Image at the top of the page, e.g. `/images/goldbot.png` |
+   | `wip`      | no       | `true` shows a "work in progress" badge (still visible) |
+   | `draft`    | no       | `true` hides the project from the whole site |
 
 3. Write the page body below the frontmatter in normal Markdown
    (`## headings`, `**bold**`, code blocks, images, links).
-4. Set `draft: false` when ready. Done — save and check the browser.
+4. Save and check the browser.
 
 Example:
 
@@ -43,6 +53,7 @@ Example:
 ---
 title: Goldbot
 blurb: IBKR data puller for gold ETF, spot, and futures.
+category: finance
 order: 4
 tags: [python, ibkr]
 repo: https://github.com/AldenLee28/goldbot
@@ -52,41 +63,47 @@ draft: false
 Pulls chunked historical bars from IBKR while respecting rate limits...
 ```
 
-Typos in frontmatter (wrong field name, bad URL) fail the build with a
-clear error instead of silently breaking the site.
+Typos in frontmatter (wrong field name, missing `category`, bad URL) fail the
+build with a clear error instead of silently breaking the site.
 
-## 3. Change the home screen
+## 3. Add a blog post
+
+Every `.md` file in `src/content/blog/` becomes a post at `/blog/<filename>/`
+and is listed on `/blog/` (newest first). Copy `src/content/blog/welcome.md`,
+rename it, and edit the frontmatter:
+
+```markdown
+---
+title: Weekly bot update — 2026-07-18
+description: One-line summary shown in the blog list.
+date: 2026-07-18          # controls ordering
+tags: [trading]
+draft: false              # true = hidden
+---
+
+Post body in Markdown...
+```
+
+## 4. Change the homepage
 
 Open `src/pages/index.astro`:
 
-- **Headline / intro** — edit the text inside `<section class="hero">`.
-- **Project grid** — generated automatically; don't edit it. Control what
-  appears and in which order with each project's `order` and `draft` fields.
+- **Intro** — edit the text in the `<section class="hero">` block.
+- **Photo** — drop a square image at `public/images/profile.jpg`; until then a
+  styled "AL" initials avatar shows. (To actually swap it in, replace the
+  `<div class="avatar">` with `<img src="/images/profile.jpg" alt="Alden Lee" />`.)
+- **Contact** — edit the `contact` object at the top (email, GitHub, LinkedIn).
+  The LinkedIn URL is a placeholder — put your real profile there.
 
-## 4. Add a non-project page (e.g. Resume)
+## 4b. The Resume tab
 
-1. Create `src/pages/resume.astro` (the filename becomes the URL `/resume/`):
+`src/pages/resume.astro` shows an inline preview of `public/resume.pdf` plus a
+download button. Just drop your résumé there as **`public/resume.pdf`** — no
+code changes needed. Until the file exists the page shows a short placeholder.
 
-   ```astro
-   ---
-   import BaseLayout from '../layouts/BaseLayout.astro';
-   ---
-
-   <BaseLayout title="Resume — Alden Lee">
-     <h1>resume</h1>
-     <p>Content here. Plain HTML works.</p>
-   </BaseLayout>
-   ```
-
-2. Add it to the nav: in `src/components/Nav.astro`, add one entry to the
-   `pages` array:
-
-   ```js
-   const pages = [
-     { href: '/about/', label: 'about' },
-     { href: '/resume/', label: 'resume' },
-   ];
-   ```
+To add another standalone page, create `src/pages/<name>.astro` from the same
+`BaseLayout` pattern, then add `{ href: '/<name>/', label: '<Name>' }` to the
+`tabs` array in `src/components/Nav.astro`.
 
 ## 5. Change the look (theme)
 
