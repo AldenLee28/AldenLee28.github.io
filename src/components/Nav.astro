@@ -1,29 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
 import ThemeToggle from './ThemeToggle.astro';
 
-// Nav links are generated from the projects collection — adding a project
-// .md file adds its link here automatically. Drafts are hidden.
-const projects = (await getCollection('projects', ({ data }) => !data.draft))
-  .sort((a, b) => a.data.order - b.data.order);
+// Major tabs. Add a standalone page here to put it in the nav.
+const tabs = [
+  { href: '/portfolio/', label: 'Portfolio' },
+  { href: '/resume/', label: 'Resume' },
+  { href: '/blog/', label: 'Blog' },
+];
 
-// Standalone pages: add an entry here to put it in the nav.
-const pages = [{ href: '/about/', label: 'about' }];
-
-const current = Astro.url.pathname;
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path.startsWith(href);
 ---
 
 <nav class="glass-nav">
   <div class="inner">
     <a href="/" class="brand">Alden Lee</a>
     <div class="links">
-      {projects.map((p) => (
-        <a href={`/projects/${p.id}/`} aria-current={current === `/projects/${p.id}/` ? 'page' : undefined}>
-          {p.id}
-        </a>
-      ))}
-      {pages.map((p) => (
-        <a href={p.href} aria-current={current === p.href ? 'page' : undefined}>{p.label}</a>
+      {tabs.map((t) => (
+        <a href={t.href} aria-current={isActive(t.href) ? 'page' : undefined}>{t.label}</a>
       ))}
       <ThemeToggle />
     </div>

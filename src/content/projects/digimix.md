@@ -1,7 +1,8 @@
 ---
 title: Digimix
 blurb: Spotify metadata pipeline with Camelot/BPM harmonic-compatibility matching for DJs.
-order: 3
+category: tech
+order: 5
 tags: [python, spotify, music]
 draft: false
 ---
