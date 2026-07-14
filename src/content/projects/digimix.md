@@ -4,9 +4,8 @@ blurb: Spotify metadata pipeline with Camelot/BPM harmonic-compatibility matchin
 category: tech
 order: 5
 tags: [python, spotify, music]
-draft: false
+draft: true
 ---
-
 <!-- Starter stub — replace with your own write-up. -->
 
 A CLI pipeline that extracts track metadata from Spotify (search, playlists,
