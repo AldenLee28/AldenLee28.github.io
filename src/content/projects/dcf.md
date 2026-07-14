@@ -4,9 +4,9 @@ blurb: Multi-model discounted-cash-flow engine fed by Capital IQ exports and FRE
 category: finance
 order: 1
 tags: [python, valuation, fred]
+wip: true
 draft: false
 ---
-
 <!-- Starter stub — replace with your own write-up. -->
 
 A 7-phase equity valuation pipeline: data ingestion → parsing → company
