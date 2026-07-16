@@ -17,3 +17,7 @@ this one?" using Camelot-wheel key compatibility and BPM ranges.
 - SQLite storage with Parquet export
 - Camelot-wheel compatibility queries
 - Retry-hardened Spotify API client
+
+## Issues:
+
+- Finding a database housing music metadata and features, due to the recent spotify hack the api is currently unavailable.
