@@ -20,5 +20,9 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# source CV drops — the published copy is public/resume.pdf, added deliberately.
+# Keeping these out avoids committing a version with personal details by accident.
+LEE ALDEN*.pdf
+
 # jetbrains setting folder
 .idea/

@@ -1,6 +1,7 @@
 ---
 title: DCF Valuation Engine
 blurb: Multi-model discounted-cash-flow engine fed by Capital IQ reports and esitmates
+category: finance
 order: 1
 tags: [python, valuation, fred]
 wip: true
