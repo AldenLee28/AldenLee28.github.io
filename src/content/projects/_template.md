@@ -1,3 +1,4 @@
+
 ---
 # COPY THIS FILE to add a project. The new filename becomes the URL:
 #   my-cool-bot.md  ->  /projects/my-cool-bot/
@@ -15,7 +16,6 @@ tags: [python, finance]         # shown as chips on the card and page
 wip: false                      # true = shows a "work in progress" badge (still visible)
 draft: false                    # true = hidden from the site entirely
 ---
-
 Write about the project here in plain Markdown.
 
 ## What it does
