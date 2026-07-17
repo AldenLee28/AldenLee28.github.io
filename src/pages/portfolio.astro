@@ -25,10 +25,25 @@ const sections = [
   { key: 'tech' as const, label: 'Tech' },
   { key: 'finance' as const, label: 'Finance' },
 ];
+
+// Featured projects get a highlighted row at the top (they still appear in
+// their category below). Mark one with `featured: true` in its frontmatter.
+const featured = all.filter((p) => p.data.featured);
 ---
 
 <BaseLayout title="Portfolio — Alden Lee">
   <h1>Portfolio</h1>
+
+  {featured.length > 0 && (
+    <section class="category featured">
+      <h2>Featured</h2>
+      <div class="grid">
+        {featured.map((p) => (
+          <ProjectCard id={p.id} title={p.data.title} blurb={p.data.blurb} tags={p.data.tags} wip={p.data.wip} />
+        ))}
+      </div>
+    </section>
+  )}
 
   {sections.map(({ key, label }) => {
     const { loose, groups } = organize(key);
@@ -63,6 +78,9 @@ const sections = [
 <style>
   .category {
     margin-bottom: var(--space-2xl);
+  }
+  .featured h2 {
+    color: var(--color-accent-text);
   }
   .subgroup {
     margin-top: var(--space-lg);

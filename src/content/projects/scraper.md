@@ -2,6 +2,7 @@
 title: WSJ Scraper and sentiment analysis
 blurb: A data-collection scraper on WSJ article overviews, mixed with a finBERT focused analysis for sentiment derivation
 category: tech
+featured: true
 order: 4
 tags: [python, scraping]
 wip: true

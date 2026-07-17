@@ -35,6 +35,7 @@ Every `.md` file in `src/content/projects/` automatically becomes a card on the
    | `blurb`    | yes      | One-liner on the card |
    | `category` | **yes**  | `tech` or `finance` — which Portfolio section it lands in |
    | `group`    | no       | Sub-heading within a category, e.g. `ML growth diary` |
+   | `featured` | no       | `true` also shows it in the "Featured" row atop Portfolio |
    | `order`    | no       | Sort position within its section (lower = first, default 99) |
    | `tags`     | no       | Shown as chips |
    | `repo`     | no       | "source ↗" link (full URL) |
