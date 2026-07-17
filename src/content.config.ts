@@ -11,6 +11,7 @@ const projects = defineCollection({
     blurb: z.string(), // one-liner shown on the card
     category: z.enum(['tech', 'finance']), // which Portfolio section it lands in
     group: z.string().optional(), // sub-heading within a category, e.g. "ML growth diary"
+    featured: z.boolean().default(false), // also highlighted in the Portfolio "Featured" row
     order: z.number().default(99), // lower = earlier within its section
     tags: z.array(z.string()).default([]),
     repo: z.url().optional(),
