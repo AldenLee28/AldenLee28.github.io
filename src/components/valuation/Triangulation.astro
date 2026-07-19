@@ -1,0 +1,79 @@
+---
+// Horizontal bars comparing the growth rate the market implies against what
+// the Street (consensus, guidance) and the company's own history say. One
+// metric (growth %) across sources → single-hue bars, identity by row label;
+// the market-implied bar is emphasized. Consensus carries a low–high whisker.
+interface Tri {
+  fwd_year: number;
+  implied: number | null;
+  guidance_rev: number | null;
+  consensus_rev: number | null;
+  consensus_rev_low: number | null;
+  consensus_rev_high: number | null;
+  consensus_analysts: number;
+  demonstrated_cagr: number | null;
+}
+interface Props { tri: Tri; }
+const { tri } = Astro.props;
+
+type Row = { label: string; value: number; lo?: number; hi?: number; emphasis?: boolean };
+const rows: Row[] = [];
+if (tri.implied != null) rows.push({ label: 'Market-implied', value: tri.implied, emphasis: true });
+if (tri.guidance_rev != null) rows.push({ label: 'Mgmt guidance', value: tri.guidance_rev });
+if (tri.consensus_rev != null)
+  rows.push({
+    label: `Consensus (${tri.consensus_analysts})`,
+    value: tri.consensus_rev,
+    lo: tri.consensus_rev_low ?? undefined,
+    hi: tri.consensus_rev_high ?? undefined,
+  });
+if (tri.demonstrated_cagr != null) rows.push({ label: 'Demonstrated', value: tri.demonstrated_cagr });
+
+const W = 640, rowH = 40, padL = 132, padR = 60, padT = 8, padB = 28;
+const H = padT + rows.length * rowH + padB;
+const vals = rows.flatMap((r) => [r.value, r.lo ?? r.value, r.hi ?? r.value]);
+const lo = Math.min(0, ...vals);
+const hi = Math.max(...vals) * 1.08;
+const x = (v: number) => padL + ((v - lo) / (hi - lo)) * (W - padL - padR);
+const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+const zero = x(0);
+---
+
+<figure class="chart">
+  <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img"
+       aria-label={`Market-implied growth versus consensus and guidance for FY${tri.fwd_year}`}>
+    <line x1={zero} y1={padT} x2={zero} y2={H - padB} class="axis" />
+    {rows.map((r, i) => {
+      const cy = padT + i * rowH + rowH / 2;
+      const bw = x(r.value) - zero;
+      return (
+        <g>
+          <text x={padL - 12} y={cy + 4} class="row-label" text-anchor="end">{r.label}</text>
+          <rect x={zero} y={cy - 9} width={Math.max(0, bw)} height="18" rx="4"
+                class={r.emphasis ? 'bar emph' : 'bar'}>
+            <title>{r.label}: {pct(r.value)}</title>
+          </rect>
+          {r.lo != null && r.hi != null && (
+            <g class="whisker">
+              <line x1={x(r.lo)} y1={cy} x2={x(r.hi)} y2={cy} />
+              <line x1={x(r.lo)} y1={cy - 5} x2={x(r.lo)} y2={cy + 5} />
+              <line x1={x(r.hi)} y1={cy - 5} x2={x(r.hi)} y2={cy + 5} />
+            </g>
+          )}
+          <text x={x(r.value) + 8} y={cy + 4} class="val" text-anchor="start">{pct(r.value)}</text>
+        </g>
+      );
+    })}
+  </svg>
+</figure>
+
+<style>
+  .chart { margin: 0; }
+  svg { display: block; overflow: visible; }
+  .axis { stroke: var(--color-text-muted); stroke-width: 1.5; }
+  .row-label { fill: var(--color-text); font-size: 13px; }
+  .val { fill: var(--color-text-muted); font-family: var(--font-mono); font-size: 12px; }
+  .bar { fill: var(--color-accent); opacity: 0.55; }
+  .bar.emph { opacity: 1; }
+  .whisker line { stroke: var(--color-text); stroke-width: 1.5; opacity: 0.7; }
+</style>

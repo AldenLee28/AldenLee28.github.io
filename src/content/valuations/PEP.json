@@ -1,0 +1,124 @@
+{
+  "ticker": "PEP",
+  "company": "PepsiCo,Inc.",
+  "as_of": "06-Jul-2026 \u2013 14-Jul-2026",
+  "generated": "2026-07-19",
+  "currency": "USD",
+  "verdict": "UNDERVALUED",
+  "confidence": "HIGH",
+  "company_type": "stable_mature",
+  "sector": "Consumer Staples",
+  "current_price": 143.29,
+  "blended_price": 186.74,
+  "upside_pct": 0.3033,
+  "wacc": 0.072,
+  "beta_bottom_up": 0.79,
+  "beta_raw": 0.12,
+  "models": [
+    {
+      "approach": "fade",
+      "price": 181.74,
+      "weight": 0.45,
+      "tv_pct": 0.664
+    },
+    {
+      "approach": "historical",
+      "price": 205.66,
+      "weight": 0.15,
+      "tv_pct": 0.688
+    },
+    {
+      "approach": "industry",
+      "price": 155.09,
+      "weight": 0.2,
+      "tv_pct": 0.659
+    },
+    {
+      "approach": "monte_carlo",
+      "price": 215.46,
+      "weight": 0.2,
+      "tv_pct": 0.688
+    }
+  ],
+  "sensitivity": {
+    "wacc": [
+      0.052,
+      0.062,
+      0.072,
+      0.082,
+      0.092
+    ],
+    "growth": [
+      0.0548,
+      0.0648,
+      0.0748,
+      0.0848,
+      0.0948
+    ],
+    "prices": [
+      [
+        326.75,
+        358.91,
+        393.79,
+        431.6,
+        472.55
+      ],
+      [
+        227.42,
+        249.87,
+        274.18,
+        300.5,
+        328.98
+      ],
+      [
+        170.44,
+        187.36,
+        205.66,
+        225.45,
+        246.84
+      ],
+      [
+        133.54,
+        146.91,
+        161.35,
+        176.95,
+        193.79
+      ],
+      [
+        107.72,
+        118.63,
+        130.4,
+        143.11,
+        156.8
+      ]
+    ]
+  },
+  "reverse": {
+    "implied_constant": 0.0369,
+    "implied_fade": 0.041,
+    "implied_return": 0.082,
+    "dividend_yield": 0.0392,
+    "buyback_rate": 0.0019,
+    "implied_total_return": 0.1212,
+    "market_percentile": 0.34
+  },
+  "triangulation": {
+    "fwd_year": 2026,
+    "implied": 0.0369,
+    "guidance_rev": 0.05,
+    "consensus_rev": 0.0535,
+    "consensus_rev_low": 0.0426,
+    "consensus_rev_high": 0.0648,
+    "consensus_analysts": 21,
+    "consensus_ebitda": 0.0565,
+    "consensus_eps": 0.0516,
+    "demonstrated_cagr": 0.0748
+  },
+  "drivers": [
+    "Revenue CV 0.04 within stable range. Balanced weighting applied.",
+    "Revenue $94B exceeds the $50B mega-cap threshold \u2014 constant-growth extrapolation down-weighted; fade model leads the blend."
+  ],
+  "flags": [
+    "Cost of debt overridden to the rating-based rate \u2014 the average coupon on existing debt is below the risk-free rate (stale low-coupon debt)."
+  ]
+}

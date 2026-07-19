@@ -1,0 +1,65 @@
+---
+// 5×5 intrinsic price surface over WACC (rows) × growth (cols). Magnitude of a
+// single measure → sequential single hue, light→dark (dataviz). Cells nearest
+// the market price are outlined so the "what's priced in" contour reads at a glance.
+interface Sens {
+  wacc: number[];
+  growth: number[];
+  prices: number[][];
+}
+interface Props { sens: Sens; currentPrice: number; }
+const { sens, currentPrice } = Astro.props;
+
+const flat = sens.prices.flat();
+const lo = Math.min(...flat), hi = Math.max(...flat);
+// Sequential fill via alpha over the themed surface: low→faint, high→saturated.
+const fill = (p: number) => {
+  const t = hi === lo ? 0.5 : (p - lo) / (hi - lo);
+  const pctMix = (12 + t * 62).toFixed(1); // 12%–74% accent, keeps cell text legible
+  return `color-mix(in oklab, var(--color-accent) ${pctMix}%, transparent)`;
+};
+// A cell is "on the contour" when its price is within 4% of the market price.
+const nearMarket = (p: number) => Math.abs(p - currentPrice) / currentPrice <= 0.04;
+const pctRow = (w: number) => `${(w * 100).toFixed(1)}%`;
+const pctCol = (g: number) => `${(g * 100).toFixed(1)}%`;
+---
+
+<figure class="heatmap">
+  <table>
+    <thead>
+      <tr>
+        <th class="corner"><span>WACC \ g</span></th>
+        {sens.growth.map((g) => <th scope="col">{pctCol(g)}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {sens.prices.map((row, i) => (
+        <tr>
+          <th scope="row">{pctRow(sens.wacc[i])}</th>
+          {row.map((p, j) => (
+            <td class={nearMarket(p) ? 'cell contour' : 'cell'}
+                style={`background:${fill(p)}`}
+                title={`WACC ${pctRow(sens.wacc[i])}, growth ${pctCol(sens.growth[j])} → $${p.toFixed(2)}`}>
+              {p.toFixed(0)}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <figcaption>
+    Intrinsic price ($) across WACC × growth. Outlined cells price within 4% of the
+    ${currentPrice.toFixed(2)} market price — the assumptions the market is buying.
+  </figcaption>
+</figure>
+
+<style>
+  .heatmap { margin: 0; overflow-x: auto; }
+  table { border-collapse: separate; border-spacing: 2px; font-family: var(--font-mono); width: 100%; }
+  th, td { text-align: center; padding: 0.5em 0.3em; font-size: var(--text-xs); white-space: nowrap; }
+  thead th, tbody th { color: var(--color-text-muted); font-weight: 600; }
+  .corner span { font-family: var(--font-sans); }
+  .cell { color: var(--color-text); border-radius: var(--radius-sm); }
+  .contour { outline: 2px solid var(--color-accent); outline-offset: -2px; font-weight: 700; }
+  figcaption { color: var(--color-text-muted); font-size: var(--text-xs); margin-top: var(--space-sm); }
+</style>

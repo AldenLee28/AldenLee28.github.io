@@ -1,0 +1,79 @@
+---
+// Dot plot: where each model's intrinsic price lands on a common axis, with
+// the market price and blended price as reference lines. Point values on a
+// shared scale → dot plot (not zero-baseline bars, which would misread).
+interface Model { approach: string; price: number; weight: number; }
+interface Props {
+  models: Model[];
+  currentPrice: number;
+  blendedPrice: number;
+}
+const { models, currentPrice, blendedPrice } = Astro.props;
+
+const W = 640, rowH = 40, padL = 118, padR = 24, padT = 26, padB = 34;
+const H = padT + models.length * rowH + padB;
+
+const prices = [...models.map((m) => m.price), currentPrice, blendedPrice];
+const lo = Math.min(...prices) * 0.92;
+const hi = Math.max(...prices) * 1.06;
+const x = (p: number) => padL + ((p - lo) / (hi - lo)) * (W - padL - padR);
+const fmt = (p: number) => `$${p.toFixed(0)}`;
+
+// Axis ticks — a few round-ish values across the domain.
+const ticks = Array.from({ length: 5 }, (_, i) => lo + ((hi - lo) * i) / 4);
+---
+
+<figure class="chart">
+  <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img"
+       aria-label="Intrinsic price by model versus the market price">
+    <!-- gridlines + tick labels -->
+    {ticks.map((t) => (
+      <g>
+        <line x1={x(t)} y1={padT} x2={x(t)} y2={H - padB} class="grid" />
+        <text x={x(t)} y={H - padB + 20} class="tick" text-anchor="middle">{fmt(t)}</text>
+      </g>
+    ))}
+
+    <!-- reference lines: current price (neutral, dashed) + blended (accent) -->
+    <line x1={x(currentPrice)} y1={padT} x2={x(currentPrice)} y2={H - padB} class="ref-current" />
+    <line x1={x(blendedPrice)} y1={padT} x2={x(blendedPrice)} y2={H - padB} class="ref-blended" />
+
+    <!-- one row per model -->
+    {models.map((m, i) => {
+      const cy = padT + i * rowH + rowH / 2;
+      return (
+        <g>
+          <line x1={padL} y1={cy} x2={W - padR} y2={cy} class="row-guide" />
+          <text x={padL - 12} y={cy + 4} class="row-label" text-anchor="end">{m.approach}</text>
+          <circle cx={x(m.price)} cy={cy} r="6" class="dot">
+            <title>{m.approach}: {fmt(m.price)} (weight {(m.weight * 100).toFixed(0)}%)</title>
+          </circle>
+          <text x={x(m.price)} y={cy - 12} class="dot-label" text-anchor="middle">{fmt(m.price)}</text>
+        </g>
+      );
+    })}
+
+    <!-- reference labels -->
+    <text x={x(currentPrice)} y={padT - 12} class="ref-label current" text-anchor="middle">market {fmt(currentPrice)}</text>
+    <text x={x(blendedPrice)} y={H - padB + 20} class="ref-label blended" text-anchor="middle">blended {fmt(blendedPrice)}</text>
+  </svg>
+</figure>
+
+<style>
+  .chart { margin: 0; }
+  svg { display: block; overflow: visible; }
+  .grid { stroke: var(--glass-border); stroke-width: 1; }
+  .row-guide { stroke: var(--glass-border); stroke-width: 1; opacity: 0.4; }
+  .tick, .row-label, .dot-label, .ref-label {
+    fill: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .row-label { fill: var(--color-text); font-family: var(--font-sans); }
+  .dot-label { fill: var(--color-text); font-weight: 600; }
+  .dot { fill: var(--color-accent); stroke: var(--color-bg); stroke-width: 2; }
+  .ref-current { stroke: var(--color-text-muted); stroke-width: 2; stroke-dasharray: 5 4; }
+  .ref-blended { stroke: var(--color-accent); stroke-width: 2; }
+  .ref-label.current { fill: var(--color-text-muted); }
+  .ref-label.blended { fill: var(--color-accent-text); font-weight: 600; }
+</style>

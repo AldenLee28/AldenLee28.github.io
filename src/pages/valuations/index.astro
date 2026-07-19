@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VerdictBadge from '../../components/valuation/VerdictBadge.astro';
+
+const reports = (await getCollection('valuations')).sort(
+  (a, b) => b.data.upside_pct - a.data.upside_pct
+);
+const pct = (v: number) => `${v >= 0 ? '+' : ''}${(v * 100).toFixed(1)}%`;
+---
+
+<BaseLayout title="Valuations — Alden Lee" description="DCF company valuations by Alden Lee">
+  <h1>Valuations</h1>
+  <p class="lede">
+    Discounted-cash-flow valuations built from S&amp;P Capital IQ fundamentals — a
+    four-model blend, a reverse-DCF read of what the market is pricing in, and a
+    triangulation against consensus and management guidance. Figures are my own
+    analysis; methodology notes live on each report.
+  </p>
+
+  <div class="grid">
+    {reports.map((r) => (
+      <a class="glass-card card" href={`/valuations/${r.id.toLowerCase()}/`}>
+        <div class="top">
+          <span class="ticker">{r.data.ticker}</span>
+          <VerdictBadge verdict={r.data.verdict} />
+        </div>
+        <p class="company">{r.data.company}</p>
+        <p class="upside" data-sign={r.data.upside_pct >= 0 ? 'pos' : 'neg'}>{pct(r.data.upside_pct)}</p>
+        <p class="prices">
+          <span>intrinsic ${r.data.blended_price.toFixed(0)}</span>
+          <span class="muted">vs ${r.data.current_price.toFixed(0)}</span>
+        </p>
+        <p class="asof">as of {r.data.as_of}</p>
+      </a>
+    ))}
+  </div>
+
+  {reports.length === 0 && (
+    <p class="empty">No valuations published yet.</p>
+  )}
+</BaseLayout>
+
+<style>
+  .lede { color: var(--color-text-muted); max-width: 42rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+  }
+  .card {
+    display: block;
+    padding: var(--space-lg);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: transform var(--transition-base);
+  }
+  .card:hover { transform: translateY(-3px); }
+  .top { display: flex; align-items: center; justify-content: space-between; }
+  .ticker { font-weight: 700; font-size: var(--text-lg); font-family: var(--font-mono); }
+  .company { color: var(--color-text-muted); font-size: var(--text-sm); margin: var(--space-xs) 0 var(--space-md); }
+  .upside { font-size: var(--text-3xl); font-weight: 700; margin: 0; }
+  .upside[data-sign='pos'] { color: hsl(150, 55%, 36%); }
+  .upside[data-sign='neg'] { color: hsl(2, 60%, 48%); }
+  :global([data-theme='dark']) .upside[data-sign='pos'] { color: hsl(150, 55%, 62%); }
+  :global([data-theme='dark']) .upside[data-sign='neg'] { color: hsl(2, 75%, 68%); }
+  .prices { display: flex; gap: var(--space-sm); font-family: var(--font-mono); font-size: var(--text-sm); margin: var(--space-xs) 0; }
+  .prices .muted, .asof { color: var(--color-text-muted); }
+  .asof { font-size: var(--text-xs); margin: 0; }
+  .empty { color: var(--color-text-muted); }
+</style>
