@@ -1,0 +1,42 @@
+---
+// Status pill for a valuation verdict. The word itself carries the meaning,
+// so color is never the only signal (dataviz: status ships with a label).
+interface Props {
+  verdict: string;
+  size?: 'sm' | 'lg';
+}
+const { verdict, size = 'sm' } = Astro.props;
+const key = verdict.toUpperCase();
+const tone =
+  key === 'UNDERVALUED' ? 'good' : key === 'OVERVALUED' ? 'bad' : 'neutral';
+---
+
+<span class={`badge ${tone} ${size}`}>{verdict}</span>
+
+<style>
+  .badge {
+    display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--glass-border);
+    padding: 0.15em 0.8em;
+    white-space: nowrap;
+  }
+  .sm { font-size: var(--text-xs); }
+  .lg { font-size: var(--text-base); }
+  .good {
+    color: hsl(150, 55%, 32%);
+    background: hsla(150, 60%, 45%, 0.14);
+  }
+  .bad {
+    color: hsl(2, 60%, 45%);
+    background: hsla(2, 65%, 50%, 0.14);
+  }
+  .neutral {
+    color: var(--color-text-muted);
+    background: var(--glass-bg);
+  }
+  :global([data-theme='dark']) .good { color: hsl(150, 55%, 62%); }
+  :global([data-theme='dark']) .bad { color: hsl(2, 75%, 68%); }
+</style>

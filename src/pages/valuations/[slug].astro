@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VerdictBadge from '../../components/valuation/VerdictBadge.astro';
+import FootballField from '../../components/valuation/FootballField.astro';
+import Triangulation from '../../components/valuation/Triangulation.astro';
+import SensitivityHeatmap from '../../components/valuation/SensitivityHeatmap.astro';
+
+export async function getStaticPaths() {
+  const reports = await getCollection('valuations');
+  return reports.map((r) => ({ params: { slug: r.id.toLowerCase() }, props: { r } }));
+}
+
+const { r } = Astro.props;
+const d = r.data;
+const pct = (v: number, dp = 1) => `${v >= 0 ? '+' : ''}${(v * 100).toFixed(dp)}%`;
+const plain = (v: number, dp = 1) => `${(v * 100).toFixed(dp)}%`;
+
+const metrics = [
+  { label: 'WACC', value: plain(d.wacc, 1) },
+  { label: 'Beta (bottom-up)', value: d.beta_bottom_up.toFixed(2), sub: `raw ${d.beta_raw.toFixed(2)}` },
+  { label: 'Implied return', value: plain(d.reverse.implied_return, 1) },
+  { label: 'Dividend yield', value: plain(d.reverse.dividend_yield, 1) },
+  { label: 'Implied total return', value: plain(d.reverse.implied_total_return, 1) },
+  { label: 'Market percentile', value: `P${(d.reverse.market_percentile * 100).toFixed(0)}` },
+];
+---
+
+<BaseLayout title={`${d.company} valuation — Alden Lee`}
+            description={`DCF valuation of ${d.company}: ${d.verdict}, ${pct(d.upside_pct)} vs market.`}>
+  <article>
+    <header class="head">
+      <div>
+        <p class="eyebrow">{d.sector} · {d.company_type.replace(/_/g, ' ')} · {d.confidence} confidence</p>
+        <h1>{d.company} <span class="ticker">{d.ticker}</span></h1>
+        <p class="asof">Source: S&amp;P Capital IQ Pro, {d.as_of} · generated {d.generated}</p>
+      </div>
+      <div class="verdict">
+        <VerdictBadge verdict={d.verdict} size="lg" />
+        <p class="upside" data-sign={d.upside_pct >= 0 ? 'pos' : 'neg'}>{pct(d.upside_pct)}</p>
+        <p class="prices">intrinsic <strong>${d.blended_price.toFixed(2)}</strong> vs ${d.current_price.toFixed(2)} market</p>
+      </div>
+    </header>
+
+    <section class="glass-panel block">
+      <h2>What it's worth</h2>
+      <p class="cap">Intrinsic price by model, weighted into the blend, against the market price.</p>
+      <FootballField models={d.models} currentPrice={d.current_price} blendedPrice={d.blended_price} />
+    </section>
+
+    {d.triangulation && (
+      <section class="glass-panel block">
+        <h2>Market vs the Street</h2>
+        <p class="cap">
+          FY{d.triangulation.fwd_year} growth: what the price implies (long-run) against consensus,
+          guidance, and {d.ticker}'s demonstrated history. Single-year rates except the implied figure.
+        </p>
+        <Triangulation tri={d.triangulation} />
+      </section>
+    )}
+
+    <section class="glass-panel block">
+      <h2>Sensitivity</h2>
+      <SensitivityHeatmap sens={d.sensitivity} currentPrice={d.current_price} />
+    </section>
+
+    <section class="block">
+      <h2>Key metrics</h2>
+      <div class="metrics">
+        {metrics.map((m) => (
+          <div class="metric glass-card">
+            <span class="m-label">{m.label}</span>
+            <span class="m-value">{m.value}</span>
+            {m.sub && <span class="m-sub">{m.sub}</span>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {d.drivers.length > 0 && (
+      <section class="block">
+        <h2>Drivers</h2>
+        <ul class="notes">{d.drivers.map((n) => <li>{n}</li>)}</ul>
+      </section>
+    )}
+
+    {d.flags.length > 0 && (
+      <section class="block">
+        <h2>Caveats</h2>
+        <ul class="notes flags">{d.flags.map((n) => <li>{n}</li>)}</ul>
+      </section>
+    )}
+
+    <p class="back"><a href="/valuations/">← all valuations</a></p>
+  </article>
+</BaseLayout>
+
+<style>
+  .head {
+    display: flex; flex-wrap: wrap; gap: var(--space-lg);
+    align-items: flex-start; justify-content: space-between;
+  }
+  .eyebrow { color: var(--color-accent-text); font-size: var(--text-sm); text-transform: capitalize; margin: 0; }
+  h1 { margin: var(--space-xs) 0; }
+  .ticker { font-family: var(--font-mono); color: var(--color-text-muted); font-size: 0.6em; vertical-align: middle; }
+  .asof { color: var(--color-text-muted); font-size: var(--text-xs); margin: 0; }
+  .verdict { text-align: right; }
+  .upside { font-size: var(--text-4xl); font-weight: 700; margin: var(--space-xs) 0 0; }
+  .upside[data-sign='pos'] { color: hsl(150, 55%, 36%); }
+  .upside[data-sign='neg'] { color: hsl(2, 60%, 48%); }
+  :global([data-theme='dark']) .upside[data-sign='pos'] { color: hsl(150, 55%, 62%); }
+  :global([data-theme='dark']) .upside[data-sign='neg'] { color: hsl(2, 75%, 68%); }
+  .prices { color: var(--color-text-muted); font-family: var(--font-mono); font-size: var(--text-sm); margin: 0; }
+  .prices strong { color: var(--color-text); }
+  .block { margin-top: var(--space-2xl); }
+  .glass-panel.block { padding: var(--space-lg); }
+  h2 { font-size: var(--text-xl); }
+  .cap { color: var(--color-text-muted); font-size: var(--text-sm); margin-top: 0; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-md); }
+  .metric { display: flex; flex-direction: column; gap: 0.15em; padding: var(--space-md); }
+  .m-label { color: var(--color-text-muted); font-size: var(--text-xs); }
+  .m-value { font-size: var(--text-2xl); font-weight: 700; font-family: var(--font-mono); }
+  .m-sub { color: var(--color-text-muted); font-size: var(--text-xs); font-family: var(--font-mono); }
+  .notes { color: var(--color-text-muted); line-height: 1.6; padding-left: var(--space-lg); }
+  .notes.flags li { color: var(--color-text); }
+  .back { margin-top: var(--space-2xl); }
+  .back a { color: var(--color-accent-text); }
+</style>

@@ -1,14 +1,17 @@
 ---
-title: Research Reports
-blurb: Written valuation and market reports produced from the finance tooling.
+title: Company Valuations
+blurb: DCF valuations of individual companies, published as interactive reports.
 category: finance
 order: 2
-tags: [research, valuation]
-wip: true
-draft: true
+tags: [research, valuation, dcf]
+demo: https://aldenlee28.github.io/valuations/
 ---
-<!-- Work in progress — write-up coming. -->
 
-A home for written reports built on top of the DCF engine and market data —
-company valuations and thematic notes. Recurring results and weekly updates
-live in the [blog](/blog/).
+Discounted-cash-flow valuations of individual companies, built on top of the
+DCF engine and S&P Capital IQ fundamentals. Each report blends four valuation
+models, reverse-engineers the growth the market is pricing in, and triangulates
+that against analyst consensus and management guidance.
+
+**→ [Browse the valuations](/valuations/)**
+
+Recurring results and weekly updates live in the [blog](/blog/).
