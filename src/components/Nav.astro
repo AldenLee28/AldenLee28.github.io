@@ -2,11 +2,13 @@
 import ThemeToggle from './ThemeToggle.astro';
 
 // Major tabs. Add a standalone page here to put it in the nav.
+// Valuations and Blog are unlisted for now — the pages still build and work
+// by direct URL; uncomment a line to put the tab back in the nav.
 const tabs = [
   { href: '/portfolio/', label: 'Portfolio' },
-  { href: '/valuations/', label: 'Valuations' },
+  // { href: '/valuations/', label: 'Valuations' },
   { href: '/resume/', label: 'Resume' },
-  { href: '/blog/', label: 'Blog' },
+  // { href: '/blog/', label: 'Blog' },
 ];
 
 const path = Astro.url.pathname;
