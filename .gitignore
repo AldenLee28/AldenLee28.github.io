@@ -26,3 +26,7 @@ LEE ALDEN*.pdf
 
 # jetbrains setting folder
 .idea/
+
+# local editor/tooling notes — keep off the public repo
+CLAUDE.md
+.claude/
