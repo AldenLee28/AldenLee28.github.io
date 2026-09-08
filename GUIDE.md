@@ -90,11 +90,13 @@ Post body in Markdown...
 Open `src/pages/index.astro`:
 
 - **Intro** — edit the text in the `<section class="hero">` block.
-- **Photo** — drop a square image at `public/images/profile.jpg`; until then a
-  styled "AL" initials avatar shows. (To actually swap it in, replace the
-  `<div class="avatar">` with `<img src="/images/profile.jpg" alt="Alden Lee" />`.)
-- **Contact** — edit the `contact` object at the top (email, GitHub, LinkedIn).
-  The LinkedIn URL is a placeholder — put your real profile there.
+- **Photo** — a styled "AL" initials avatar shows by default. To use a real
+  photo, drop a square image at `public/images/profile.jpg`, then inside
+  `<div class="avatar">` replace the `<span class="initials">AL</span>` with
+  `<img src="/images/profile.jpg" alt="Alden Lee" />`.
+- **Contact** — edit the `contact` object at the top (GitHub, LinkedIn). To add
+  an email button back, add `email: 'you@example.com'` to that object and a
+  `<a class="glass-button" href={`mailto:${contact.email}`}>✉ Email</a>` link.
 
 ## 4b. The Resume tab
 

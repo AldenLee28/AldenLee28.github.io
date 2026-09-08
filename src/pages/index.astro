@@ -1,9 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Contact links — edit these. LinkedIn is a placeholder until you add yours.
+// The hero shows an "AL" initials avatar. To use a real photo instead, drop a
+// square image at public/images/profile.jpg and swap the .avatar <span> for:
+//   <img src="/images/profile.jpg" alt="Alden Lee" />
+
+// Contact links shown in the Contact Me section.
 const contact = {
-  email: 'ajmlee28@gmail.com',
   github: 'https://github.com/AldenLee28',
   linkedin: 'https://www.linkedin.com/in/alden-jacob-lee-0a05a02aa',
 };
@@ -11,16 +14,13 @@ const contact = {
 
 <BaseLayout title="Alden Lee — Developer Portfolio">
   <section class="hero glass-panel">
-    <!-- Shows public/images/profile.jpg once you add it; falls back to the
-         "AL" initials avatar if the file is missing. -->
     <div class="avatar">
-      <img src="/images/profile.jpg" alt="Alden Lee" onerror="this.remove()" />
-      <span class="initials" aria-hidden="true">AL</span>
+      <span class="initials">AL</span>
     </div>
     <div class="intro">
       <h1>Hi! I'm Alden Lee</h1>
       <p>
-        I'm a year 3 Information Systems student at HKUST. Welcome to my personal website, in here you will find alot about me and my different projects.
+        I'm a year 3 Information Systems student at HKUST. Welcome to my personal website, in here you will find a lot about me and my different projects.
       </p>
       <p class="cta"><a class="glass-button" href="/portfolio/">View my work →</a></p>
     </div>
