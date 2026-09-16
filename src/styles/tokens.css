@@ -28,6 +28,10 @@
   /* Fonts */
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+  /* Nameplate in the nav. Rockwell ships with MS Office, so it renders locally
+     for anyone who has it; Rokkitt is a free geometric slab that stands in
+     (loaded in BaseLayout) for everyone else. */
+  --font-brand: 'Rockwell Extra Bold', Rockwell, Rokkitt, Georgia, serif;
 
   /* ================== end EDIT ME ================== */
 

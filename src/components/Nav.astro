@@ -41,7 +41,10 @@ const isActive = (href: string) => path === href || path.startsWith(href);
   .brand {
     color: var(--color-text);
     text-decoration: none;
-    font-weight: 700;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    font-size: var(--text-xl);
+    letter-spacing: 0.01em;
   }
   .brand:hover {
     color: var(--color-accent);
