@@ -73,8 +73,3 @@ be compared across companies.
 
 Source: Swire Properties Annual Report 2025 (auditor's report, consolidated
 statements, notes 4, 6, 19 and 23).
-
-## Next
-
-Extend to five companies, mixing developer-heavy and landlord-heavy
-businesses, to test whether the KAMs line up with each company's business mix.
